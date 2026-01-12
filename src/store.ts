@@ -9,6 +9,7 @@ export interface Question {
   type?: "text" | "select" | "multiselect" | "boolean";
   options?: string[];
   allowCustom?: boolean;
+  allowNone?: boolean;
   required?: boolean;
   default?: string;
 }

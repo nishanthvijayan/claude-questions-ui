@@ -188,7 +188,12 @@ This tool blocks until the user submits their answers.`,
             allowCustom: {
               type: "boolean",
               description:
-                "For select types: whether to allow typing a custom answer",
+                "For select/multiselect: whether to show an 'Other' option with a text field for custom answers",
+            },
+            allowNone: {
+              type: "boolean",
+              description:
+                "For multiselect: whether to show a 'None of the above' option. Defaults to true.",
             },
             required: {
               type: "boolean",

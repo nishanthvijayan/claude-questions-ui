@@ -71,79 +71,79 @@
         return textarea;
 
       case 'select':
+        const radioContainer = document.createElement('div');
+        radioContainer.className = 'radio-options';
+        radioContainer.dataset.name = question.id;
+
+        (question.options || []).forEach((opt, idx) => {
+          const optionDiv = document.createElement('div');
+          optionDiv.className = 'radio-option';
+
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.id = `${id}-${idx}`;
+          radio.name = question.id;
+          radio.value = opt;
+          if (question.default === opt) radio.checked = true;
+
+          const label = document.createElement('label');
+          label.htmlFor = radio.id;
+          label.textContent = opt;
+
+          optionDiv.appendChild(radio);
+          optionDiv.appendChild(label);
+          radioContainer.appendChild(optionDiv);
+        });
+
+        // Add "Other" option with text field
         if (question.allowCustom) {
-          // Select with custom option
-          const wrapper = document.createElement('div');
-          wrapper.className = 'select-with-custom';
+          const otherDiv = document.createElement('div');
+          otherDiv.className = 'radio-option radio-option-other';
 
-          const select = document.createElement('select');
-          select.id = id;
-          select.name = question.id;
+          const otherRadio = document.createElement('input');
+          otherRadio.type = 'radio';
+          otherRadio.id = `${id}-other`;
+          otherRadio.name = question.id;
+          otherRadio.value = '__other__';
 
-          const defaultOption = document.createElement('option');
-          defaultOption.value = '';
-          defaultOption.textContent = 'Select an option...';
-          select.appendChild(defaultOption);
+          const otherLabel = document.createElement('label');
+          otherLabel.htmlFor = otherRadio.id;
+          otherLabel.textContent = 'Other:';
 
-          (question.options || []).forEach(opt => {
-            const option = document.createElement('option');
-            option.value = opt;
-            option.textContent = opt;
-            if (question.default === opt) option.selected = true;
-            select.appendChild(option);
-          });
+          const otherInput = document.createElement('input');
+          otherInput.type = 'text';
+          otherInput.id = `${id}-other-text`;
+          otherInput.className = 'other-text-input';
+          otherInput.placeholder = 'Type your answer...';
 
-          const customOption = document.createElement('option');
-          customOption.value = '__custom__';
-          customOption.textContent = 'Other (custom)...';
-          select.appendChild(customOption);
-
-          const customInput = document.createElement('input');
-          customInput.type = 'text';
-          customInput.id = `${id}-custom`;
-          customInput.placeholder = 'Enter custom value...';
-          customInput.className = 'hidden';
-
-          select.addEventListener('change', () => {
-            if (select.value === '__custom__') {
-              customInput.classList.remove('hidden');
-              customInput.focus();
-            } else {
-              customInput.classList.add('hidden');
-              customInput.value = '';
+          // Focus text input when "Other" is selected
+          otherRadio.addEventListener('change', () => {
+            if (otherRadio.checked) {
+              otherInput.focus();
             }
           });
 
-          wrapper.appendChild(select);
-          wrapper.appendChild(customInput);
-          return wrapper;
-        } else {
-          // Regular select
-          const select = document.createElement('select');
-          select.id = id;
-          select.name = question.id;
-          if (isRequired) select.required = true;
-
-          const defaultOption = document.createElement('option');
-          defaultOption.value = '';
-          defaultOption.textContent = 'Select an option...';
-          select.appendChild(defaultOption);
-
-          (question.options || []).forEach(opt => {
-            const option = document.createElement('option');
-            option.value = opt;
-            option.textContent = opt;
-            if (question.default === opt) option.selected = true;
-            select.appendChild(option);
+          // Select "Other" radio when typing in text field
+          otherInput.addEventListener('focus', () => {
+            otherRadio.checked = true;
           });
 
-          return select;
+          otherDiv.appendChild(otherRadio);
+          otherDiv.appendChild(otherLabel);
+          otherDiv.appendChild(otherInput);
+          radioContainer.appendChild(otherDiv);
         }
+
+        return radioContainer;
 
       case 'multiselect':
         const checkboxContainer = document.createElement('div');
         checkboxContainer.className = 'multiselect-options';
         checkboxContainer.dataset.name = question.id;
+
+        // Track special checkboxes for interaction logic
+        let noneCheckbox = null;
+        let otherCheckbox = null;
 
         (question.options || []).forEach((opt, idx) => {
           const optionDiv = document.createElement('div');
@@ -162,6 +162,81 @@
           optionDiv.appendChild(checkbox);
           optionDiv.appendChild(label);
           checkboxContainer.appendChild(optionDiv);
+        });
+
+        // Add "Other" option with text field (if allowCustom is true)
+        if (question.allowCustom) {
+          const otherDiv = document.createElement('div');
+          otherDiv.className = 'checkbox-option checkbox-option-other';
+
+          otherCheckbox = document.createElement('input');
+          otherCheckbox.type = 'checkbox';
+          otherCheckbox.id = `${id}-other`;
+          otherCheckbox.name = `${question.id}[]`;
+          otherCheckbox.value = '__other__';
+
+          const otherLabel = document.createElement('label');
+          otherLabel.htmlFor = otherCheckbox.id;
+          otherLabel.textContent = 'Other:';
+
+          const otherInput = document.createElement('input');
+          otherInput.type = 'text';
+          otherInput.id = `${id}-other-text`;
+          otherInput.className = 'other-text-input';
+          otherInput.placeholder = 'Type your answer...';
+
+          // Check "Other" checkbox when typing in text field
+          otherInput.addEventListener('focus', () => {
+            otherCheckbox.checked = true;
+            // Uncheck "None" if it exists
+            if (noneCheckbox) noneCheckbox.checked = false;
+          });
+
+          otherDiv.appendChild(otherCheckbox);
+          otherDiv.appendChild(otherLabel);
+          otherDiv.appendChild(otherInput);
+          checkboxContainer.appendChild(otherDiv);
+        }
+
+        // Add "None of the above" option (default: true, unless explicitly set to false)
+        if (question.allowNone !== false) {
+          const noneDiv = document.createElement('div');
+          noneDiv.className = 'checkbox-option checkbox-option-none';
+
+          noneCheckbox = document.createElement('input');
+          noneCheckbox.type = 'checkbox';
+          noneCheckbox.id = `${id}-none`;
+          noneCheckbox.name = `${question.id}[]`;
+          noneCheckbox.value = '__none__';
+
+          const noneLabel = document.createElement('label');
+          noneLabel.htmlFor = noneCheckbox.id;
+          noneLabel.textContent = 'None of the above';
+
+          // When "None" is checked, uncheck all others (including Other)
+          noneCheckbox.addEventListener('change', () => {
+            if (noneCheckbox.checked) {
+              checkboxContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                if (cb !== noneCheckbox) cb.checked = false;
+              });
+              // Clear "Other" text field
+              const otherText = checkboxContainer.querySelector('.other-text-input');
+              if (otherText) otherText.value = '';
+            }
+          });
+
+          noneDiv.appendChild(noneCheckbox);
+          noneDiv.appendChild(noneLabel);
+          checkboxContainer.appendChild(noneDiv);
+        }
+
+        // When any other option is checked, uncheck "None"
+        checkboxContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', () => {
+            if (cb.checked && noneCheckbox && cb !== noneCheckbox) {
+              noneCheckbox.checked = false;
+            }
+          });
         });
 
         return checkboxContainer;
@@ -285,23 +360,40 @@
           break;
 
         case 'select':
-          if (question.allowCustom) {
-            const select = document.querySelector(`#q-${id}`);
-            const customInput = document.querySelector(`#q-${id}-custom`);
-            if (select && select.value === '__custom__') {
-              answers[id] = customInput ? customInput.value : '';
+          const selectedRadio = document.querySelector(`input[name="${id}"]:checked`);
+          if (selectedRadio) {
+            if (selectedRadio.value === '__other__') {
+              const otherText = document.querySelector(`#q-${id}-other-text`);
+              answers[id] = otherText ? otherText.value : '';
             } else {
-              answers[id] = select ? select.value : '';
+              answers[id] = selectedRadio.value;
             }
           } else {
-            const select = document.querySelector(`#q-${id}`);
-            answers[id] = select ? select.value : '';
+            answers[id] = '';
           }
           break;
 
         case 'multiselect':
           const checkboxes = document.querySelectorAll(`input[name="${id}[]"]:checked`);
-          answers[id] = Array.from(checkboxes).map(cb => cb.value);
+          let values = Array.from(checkboxes).map(cb => cb.value);
+
+          // Handle "None of the above" - return empty array
+          if (values.includes('__none__')) {
+            answers[id] = [];
+            break;
+          }
+
+          // Handle "Other" - replace __other__ with actual text value
+          if (values.includes('__other__')) {
+            const otherText = document.querySelector(`#q-${id}-other-text`);
+            const otherValue = otherText ? otherText.value.trim() : '';
+            values = values.filter(v => v !== '__other__');
+            if (otherValue) {
+              values.push(otherValue);
+            }
+          }
+
+          answers[id] = values;
           break;
 
         case 'boolean':
@@ -343,26 +435,32 @@
           break;
 
         case 'select':
-          if (question.allowCustom) {
-            const select = document.querySelector(`#q-${id}`);
-            const customInput = document.querySelector(`#q-${id}-custom`);
-            if (select.value === '__custom__') {
-              isEmpty = !customInput || !customInput.value.trim();
-              inputEl = customInput;
-            } else {
-              isEmpty = !select || !select.value;
-              inputEl = select;
-            }
-          } else {
-            inputEl = document.querySelector(`#q-${id}`);
-            isEmpty = !inputEl || !inputEl.value;
+          const selectedRadioVal = document.querySelector(`input[name="${id}"]:checked`);
+          inputEl = document.querySelector(`[data-name="${id}"]`);
+          if (!selectedRadioVal) {
+            isEmpty = true;
+          } else if (selectedRadioVal.value === '__other__') {
+            const otherTextVal = document.querySelector(`#q-${id}-other-text`);
+            isEmpty = !otherTextVal || !otherTextVal.value.trim();
           }
           break;
 
         case 'multiselect':
-          const checked = document.querySelectorAll(`input[name="${id}[]"]:checked`);
-          isEmpty = checked.length === 0;
+          const checkedBoxes = document.querySelectorAll(`input[name="${id}[]"]:checked`);
+          const checkedValues = Array.from(checkedBoxes).map(cb => cb.value);
           inputEl = document.querySelector(`[data-name="${id}"]`);
+
+          if (checkedBoxes.length === 0) {
+            isEmpty = true;
+          } else if (checkedValues.includes('__other__') && !checkedValues.includes('__none__')) {
+            // If "Other" is checked, make sure text field has value
+            const otherTextMulti = document.querySelector(`#q-${id}-other-text`);
+            // Only invalid if "Other" is the ONLY selection and it's empty
+            const hasOtherSelections = checkedValues.some(v => v !== '__other__' && v !== '__none__');
+            if (!hasOtherSelections && (!otherTextMulti || !otherTextMulti.value.trim())) {
+              isEmpty = true;
+            }
+          }
           break;
 
         case 'boolean':
