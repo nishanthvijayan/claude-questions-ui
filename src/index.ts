@@ -99,6 +99,24 @@ async function main() {
   await server.connect(transport);
 
   console.error("Questions UI MCP server running");
+
+  // Handle graceful shutdown
+  const shutdown = async () => {
+    console.error("Shutting down Questions UI server...");
+    const { stopServer } = await import("./web/server.js");
+    await stopServer();
+    await server.close();
+    process.exit(0);
+  };
+
+  // Listen for shutdown signals
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
+  process.on("SIGHUP", shutdown);
+
+  // When stdin closes (Claude Code exits), shutdown
+  process.stdin.on("close", shutdown);
+  process.stdin.on("end", shutdown);
 }
 
 main().catch((error) => {
