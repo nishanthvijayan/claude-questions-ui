@@ -121,6 +121,39 @@ Tell Claude Code:
 
 Claude will call the tool, your browser opens with all questions, you answer and submit, and Claude continues with your answers.
 
+## The `/interview` Command
+
+A powerful way to use this tool is with the spec-based workflow [popularized by @trq212](https://x.com/trq212/status/2005315275026260309):
+
+> "My favorite way to use Claude Code to build large features is spec based. Start with a minimal spec or prompt and ask Claude to interview you using the AskUserQuestionTool. Then make a new session to execute the spec."
+
+To enable this workflow, create a custom slash command:
+
+**Create file: `~/.claude/commands/interview.md`**
+
+```markdown
+---
+description: Prompt Claude to interview you regarding something
+argument-hint: Objective of interview
+---
+
+Interview me in detail using the ask_questions_web MCP tool but make sure the questions are not obvious.
+
+Be very in-depth and continue interviewing me continually until it's complete.
+
+Objective of interview: $ARGUMENTS
+```
+
+**Usage:**
+
+```
+/interview requirements for a new authentication system
+/interview what features to build for the MVP
+/interview tech stack decisions for the project
+```
+
+Claude will ask you thoughtful, in-depth questions via the web UI, continuing until it has gathered enough information to produce a comprehensive spec.
+
 ## Development
 
 ```bash
