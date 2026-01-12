@@ -2,6 +2,10 @@
 
 An MCP (Model Context Protocol) server that provides a `ask_questions_web` tool for Claude Code. Instead of asking clarification questions one-by-one in the terminal, Claude can open a web UI where users can see all questions at once, answer them comfortably, and submit.
 
+<img width="1662" height="1678" alt="ask-questions-mcp-tool-screenshot" src="https://github.com/user-attachments/assets/a4437e7e-ca1e-45ea-8ca5-019097bdc217" />
+
+
+
 ## Installation
 
 ```bash
