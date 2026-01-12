@@ -3,6 +3,51 @@
  */
 
 (function() {
+  // Theme handling
+  const THEME_KEY = 'questions-ui-theme';
+
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function getSavedTheme() {
+    return localStorage.getItem(THEME_KEY);
+  }
+
+  function setTheme(theme) {
+    if (theme === 'system') {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.removeItem(THEME_KEY);
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem(THEME_KEY, theme);
+    }
+  }
+
+  function getCurrentEffectiveTheme() {
+    const saved = getSavedTheme();
+    if (saved) return saved;
+    return getSystemTheme();
+  }
+
+  function toggleTheme() {
+    const current = getCurrentEffectiveTheme();
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+  }
+
+  // Initialize theme
+  const savedTheme = getSavedTheme();
+  if (savedTheme) {
+    setTheme(savedTheme);
+  }
+
+  // Theme toggle button
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+
   // Get session ID from URL path
   const pathParts = window.location.pathname.split('/');
   const sessionId = pathParts[pathParts.length - 1];
