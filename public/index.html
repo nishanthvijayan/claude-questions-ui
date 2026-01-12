@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questions - Claude Code</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading questions...</p>
+    </div>
+
+    <div id="error" class="error hidden">
+      <h2>Error</h2>
+      <p id="error-message"></p>
+    </div>
+
+    <div id="submitted" class="submitted hidden">
+      <div class="success-icon">&#10003;</div>
+      <h2>Answers Submitted!</h2>
+      <p>Your answers have been sent to Claude Code. You can close this tab.</p>
+    </div>
+
+    <div id="form-container" class="hidden">
+      <header>
+        <h1 id="form-title">Questions</h1>
+        <p id="form-context" class="context hidden"></p>
+      </header>
+
+      <form id="questions-form">
+        <div id="questions-list"></div>
+
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">Submit Answers</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

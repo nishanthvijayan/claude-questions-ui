@@ -1,0 +1,317 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #007acc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading p {
+  margin-top: 16px;
+  color: #666;
+}
+
+/* Error State */
+.error {
+  background: #fff;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.error h2 {
+  color: #d32f2f;
+  margin-bottom: 12px;
+}
+
+.error p {
+  color: #666;
+}
+
+/* Success/Submitted State */
+.submitted {
+  background: #fff;
+  border-radius: 8px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background: #4caf50;
+  color: white;
+  font-size: 36px;
+  line-height: 64px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.submitted h2 {
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.submitted p {
+  color: #666;
+}
+
+/* Form Container */
+#form-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+header {
+  padding: 24px 30px;
+  border-bottom: 1px solid #eee;
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.context {
+  margin-top: 12px;
+  color: #666;
+  font-size: 15px;
+}
+
+/* Questions */
+#questions-list {
+  padding: 20px 30px;
+}
+
+.question-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+}
+
+.question-label {
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.question-label .required {
+  color: #d32f2f;
+  margin-left: 4px;
+}
+
+.question-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* Input Styles */
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Custom input for select with allowCustom */
+.select-with-custom {
+  display: flex;
+  gap: 10px;
+}
+
+.select-with-custom select {
+  flex: 1;
+}
+
+.select-with-custom input {
+  flex: 1;
+}
+
+/* Boolean toggle */
+.boolean-options {
+  display: flex;
+  gap: 12px;
+}
+
+.boolean-option {
+  flex: 1;
+}
+
+.boolean-option input {
+  display: none;
+}
+
+.boolean-option label {
+  display: block;
+  padding: 12px 20px;
+  text-align: center;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.boolean-option input:checked + label {
+  border-color: #007acc;
+  background: #007acc;
+  color: white;
+}
+
+.boolean-option label:hover {
+  border-color: #007acc;
+}
+
+/* Multiselect checkboxes */
+.multiselect-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-option label {
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* Form Actions */
+.form-actions {
+  padding: 20px 30px;
+  background: #f9f9f9;
+  border-top: 1px solid #eee;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: #007acc;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background: #006bb3;
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Validation */
+.invalid {
+  border-color: #d32f2f !important;
+}
+
+.validation-message {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 10px;
+  }
+
+  header {
+    padding: 20px;
+  }
+
+  #questions-list {
+    padding: 10px 20px;
+  }
+
+  .form-actions {
+    padding: 15px 20px;
+  }
+
+  .boolean-options {
+    flex-direction: column;
+  }
+}
