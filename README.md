@@ -4,7 +4,18 @@ An MCP (Model Context Protocol) server that provides a `ask_questions_web` tool 
 
 <img width="1662" height="1678" alt="ask-questions-mcp-tool-screenshot" src="https://github.com/user-attachments/assets/a4437e7e-ca1e-45ea-8ca5-019097bdc217" />
 
+## Table of Contents
 
+- [Installation](#installation)
+- [Configuration for Claude Code](#configuration-for-claude-code)
+- [Verification](#verification)
+- [Environment Variables](#environment-variables)
+- [How It Works](#how-it-works)
+- [Tool Schema](#tool-schema)
+- [Example Usage](#example-usage)
+- [The `/interview` Command](#the-interview-command)
+- [Development](#development)
+- [License](#license)
 
 ## Installation
 
